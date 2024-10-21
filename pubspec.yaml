@@ -1,0 +1,43 @@
+name: myfinanceapp
+description: "A new Flutter project."
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.5.3
+
+dependencies:
+  flutter:
+    sdk: flutter
+  intl: ^0.18.0
+  graphic: ^2.5.0
+  image_picker: ^1.1.2
+
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^1.0.8
+  firebase_core: ^3.6.0
+  firebase_auth: ^5.0.0
+  google_sign_in: ^6.2.1
+  sqflite: ^2.4.0
+  path: ^1.9.0
+  uuid: ^3.0.6
+  path_provider: ^2.0.11
+  shared_preferences: ^2.0.13
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^4.0.0
+  
+flutter_icons:
+  android: true                  # Set to true for Android
+  ios: false                     # Set to true for iOS if you also want to change the iOS icon
+  image_path: "assets/icon/icon.png"  # Path to your app icon
+
+flutter:
+  uses-material-design: true
+  assets:
+  - assets/

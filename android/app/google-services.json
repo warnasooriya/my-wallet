@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "118480418579",
+    "project_id": "myfinanceapp-e9945",
+    "storage_bucket": "myfinanceapp-e9945.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:118480418579:android:d4bfff8cfab540dbf10ce6",
+        "android_client_info": {
+          "package_name": "com.sliit.fyfinanceapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQ1LrbrdaS3PxmEJJpV6tkHU7Ff8vyUqg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:118480418579:android:08d97cf6e6731b82f10ce6",
+        "android_client_info": {
+          "package_name": "com.sliit.myfinanceapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQ1LrbrdaS3PxmEJJpV6tkHU7Ff8vyUqg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
