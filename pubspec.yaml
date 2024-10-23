@@ -1,5 +1,5 @@
 name: myfinanceapp
-description: "A new Flutter project."
+description: "My Wallet App"
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 version: 1.0.0+1
@@ -25,16 +25,19 @@ dependencies:
   uuid: ^3.0.6
   path_provider: ^2.0.11
   shared_preferences: ^2.0.13
+  cloud_firestore: ^5.4.4
+  connectivity_plus: ^6.1.0
+  workmanager: ^0.5.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
   flutter_lints: ^4.0.0
+  flutter_launcher_icons: ^0.13.1
   
 flutter_icons:
   android: true                  # Set to true for Android
-  ios: false                     # Set to true for iOS if you also want to change the iOS icon
+  ios: true                     # Set to true for iOS if you also want to change the iOS icon
   image_path: "assets/icon/icon.png"  # Path to your app icon
 
 flutter:

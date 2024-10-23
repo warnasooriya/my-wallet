@@ -112,13 +112,13 @@ class _ExpensesTypesScreenState extends State<ExpensesTypesScreen> {
   }
 
   // Method to delete the expense type
-  Future<bool> _deleteExpenseType(String id, int index) async {
+  Future<bool> _deleteExpenseType(String id, int index, String userId) async {
     bool status = false;
     final bool? confirmed = await _showDeleteConfirmationDialog();
     if (confirmed == null || !confirmed) return false;
     try {
       // Proceed with deletion after confirmation
-      final result = await _expensesTypeService.delete(id);
+      final result = await _expensesTypeService.delete(id, userId);
 
       if (result > 0) {
         // Only remove the item from the list if the deletion was successful
@@ -212,8 +212,8 @@ class _ExpensesTypesScreenState extends State<ExpensesTypesScreen> {
                     icon: Icon(Icons.delete,
                         color: const Color.fromARGB(255, 230, 156, 46)),
                     onPressed: () async {
-                      bool result =
-                          await _deleteExpenseType(expenseType['id'], index);
+                      bool result = await _deleteExpenseType(
+                          expenseType['id'], index, expenseType['userId']);
                       if (result) {
                         setState(() {
                           _expenseTypes.removeAt(index);

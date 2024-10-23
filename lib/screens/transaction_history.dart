@@ -171,7 +171,41 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
   }
 
   Widget _buildTransactionCard(Map transaction) {
-    return Card(
+    return Dismissible(
+      key: Key(transaction['id']),
+      direction: DismissDirection.endToStart, // Swipe to delete
+      background: Container(
+        color: Colors.red,
+        alignment: Alignment.centerRight,
+        padding: EdgeInsets.symmetric(horizontal: 20),
+        child: Icon(Icons.delete, color: Colors.white),
+      ),
+      confirmDismiss: (direction) async {
+        return await showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Delete Transaction'),
+              content:
+                  Text('Are you sure you want to delete this transaction?'),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(false), // Cancel
+                  child: Text('Cancel'),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(true), // Confirm
+                  child: Text('Delete', style: TextStyle(color: Colors.red)),
+                ),
+              ],
+            );
+          },
+        );
+      },
+      onDismissed: (direction) {
+        _deleteTransaction(transaction);
+      },
+      child: Card(
         elevation: 2,
         margin: EdgeInsets.symmetric(horizontal: 6, vertical: 1),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -214,7 +248,9 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
                       ),
                     ),
                   ]),
-                )));
+                )),
+      ),
+    );
   }
 
   Widget _buildSummaryCard(
@@ -381,6 +417,21 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
     _descriptionController.clear();
     _selectedTransactionType = null;
     _selectedSection = null;
+  }
+
+  Future<void> _deleteTransaction(Map transaction) async {
+    try {
+      final result = await _transactionService.delete(
+          transaction['id'], transaction['userId']);
+      if (result > 0) {
+        _showSnackbar('Transaction deleted successfully');
+        _loadTransactions(); // Reload the list after deletion
+      } else {
+        _showSnackbar('Failed to delete Transaction');
+      }
+    } catch (e) {
+      _showSnackbar('Error deleting Transaction: $e');
+    }
   }
 
   Future<void> _loadTransactions() async {

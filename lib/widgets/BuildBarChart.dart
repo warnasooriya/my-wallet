@@ -57,8 +57,36 @@ Widget BuildBarChart(barAnimData) {
         ),
       ],
       axes: [
-        Defaults.horizontalAxis,
-        Defaults.verticalAxis,
+        // Defaults.horizontalAxis,
+        AxisGuide(
+          // Customize the X-axis (horizontal) label color
+          line: Defaults.horizontalAxis.line,
+          label: LabelStyle(
+            textStyle: TextStyle(
+              fontSize: 12,
+
+              color:
+                  const Color.fromARGB(255, 0, 0, 0), // Set X-axis label color
+            ),
+          ),
+        ),
+        // Defaults.verticalAxis,
+        // Defaults.circularAxis,
+        // Defaults.radialAxis,
+        AxisGuide(
+          // Customize the Y-axis (vertical) label color
+          line: Defaults.verticalAxis.line,
+          grid: Defaults.radialAxis.grid,
+
+          label: LabelStyle(
+            textStyle: TextStyle(
+              fontSize: 12,
+              color: const Color.fromARGB(
+                  255, 10, 10, 10), // Set Y-axis label color
+            ),
+          ),
+        )
+        // Defaults.circularAxis,
       ],
     ),
   );

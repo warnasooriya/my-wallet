@@ -12,7 +12,7 @@ class ExpensesTypeService {
     return await _expensesTypeDAO.getByUserId(userId);
   }
 
-  Future<int> delete(String id) async {
-    return await _expensesTypeDAO.delete(id);
+  Future<int> delete(String id, String userId) async {
+    return await _expensesTypeDAO.delete(id, userId);
   }
 }

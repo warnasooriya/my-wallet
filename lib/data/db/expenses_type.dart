@@ -21,14 +21,26 @@ class ExpensesTypeDAO {
     );
   }
 
-  // Delete an item
-  Future<int> delete(String id) async {
+  Future<int> delete(String id, String userId) async {
     final db = await _dbHelper.database;
-    return await db.delete(
-      'expenses_type',
-      where: 'id = ?',
-      whereArgs: [id],
-    );
+    int deleteStatus = 0;
+    try {
+      await db.delete(
+        'expenses_type',
+        where: 'id = ?',
+        whereArgs: [id],
+      );
+
+      await db.rawQuery(
+          'inert into delete_detection (table_name,key_name,key_value,userId) values (?,?,?,?)',
+          ['expenses_type', 'id', id, userId]);
+
+      deleteStatus = 1;
+    } catch (e) {
+      print('Error deleting expenses_type : $e');
+    }
+
+    return deleteStatus;
   }
 
   Future<List<Map<String, dynamic>>> getByUserId(String userId) async {

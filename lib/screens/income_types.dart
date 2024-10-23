@@ -113,13 +113,13 @@ class _IncomeTypesScreenState extends State<IncomeTypesScreen> {
   }
 
   // Method to delete the income type
-  Future<bool> _deleteIncomeType(String id, int index) async {
+  Future<bool> _deleteIncomeType(String id, int index, String userId) async {
     bool status = false;
     final bool? confirmed = await _showDeleteConfirmationDialog();
     if (confirmed == null || !confirmed) return false;
     try {
       // Proceed with deletion after confirmation
-      final result = await _incomeTypeService.delete(id);
+      final result = await _incomeTypeService.delete(id, userId);
 
       if (result > 0) {
         // Only remove the item from the list if the deletion was successful
@@ -213,8 +213,8 @@ class _IncomeTypesScreenState extends State<IncomeTypesScreen> {
                     icon: Icon(Icons.delete,
                         color: const Color.fromARGB(255, 230, 156, 46)),
                     onPressed: () async {
-                      bool result =
-                          await _deleteIncomeType(incomeType['id'], index);
+                      bool result = await _deleteIncomeType(
+                          incomeType['id'], index, incomeType['userId']);
                       if (result) {
                         setState(() {
                           _incomeTypes.removeAt(index);

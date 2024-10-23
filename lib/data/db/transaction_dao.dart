@@ -106,4 +106,26 @@ class TransactionDAO {
           incomeVsExpensesList: incomeVsExpensesList);
     }
   }
+
+  Future<int> delete(String id, String userId) async {
+    final db = await _dbHelper.database;
+    int deleteStatus = 0;
+    try {
+      await db.delete(
+        'transactions',
+        where: 'id = ?',
+        whereArgs: [id],
+      );
+
+      await db.rawQuery(
+          'inert into delete_detection (table_name,key_name,key_value,userId) values (?,?,?,?)',
+          ['transactions', 'id', id, userId]);
+
+      deleteStatus = 1;
+    } catch (e) {
+      print('Error deleting transactions : $e');
+    }
+
+    return deleteStatus;
+  }
 }

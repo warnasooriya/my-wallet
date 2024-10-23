@@ -84,5 +84,15 @@ class DatabaseHelper {
         userId TEXT
       )
     ''');
+
+    await db.execute('''
+      CREATE TABLE delete_detection  (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        table_name TEXT,
+        key_name TEXT,
+        key_value TEXT,
+        userId TEXT
+      )
+    ''');
   }
 }

@@ -13,7 +13,7 @@ class IncomeTypeService {
     return await _incomeTypeDAO.getIncomeTypesByUserId(userId);
   }
 
-  Future<int> delete(String id) async {
-    return await _incomeTypeDAO.delete(id);
+  Future<int> delete(String id, String userId) async {
+    return await _incomeTypeDAO.delete(id, userId);
   }
 }

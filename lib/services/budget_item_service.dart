@@ -12,4 +12,8 @@ class BudgetItemService {
       userId, budgetId) async {
     return await _budgetItemDAO.getByUserIdAndBudget(userId, budgetId);
   }
+
+  Future<int> delete(String id, String userId) async {
+    return _budgetItemDAO.delete(id, userId);
+  }
 }

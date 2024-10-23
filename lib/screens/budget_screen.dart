@@ -76,159 +76,198 @@ class _BudgetScreenState extends State<BudgetScreen> with RouteAware {
         child: Column(
           children: [
             ...transactions
-                .map((transaction) => Container(
-                        child: InkWell(
-                      onTap: () {
-                        viewBudgetDetailsAdding(
-                            transaction["id"], transaction["title"]);
-                        // You can perform any action here when the card is tapped
-                      },
-                      child: Card(
-                        color: Colors.white,
-                        elevation: 5,
-                        shape: RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.zero, // Removes rounded corners
-                        ),
-                        margin:
-                            EdgeInsets.symmetric(horizontal: 6, vertical: 6),
-                        child: Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 10),
-                            child: Column(
-                              children: <Widget>[
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        transaction["title"].toString(),
-                                        style: TextStyle(
-                                            color: Colors.blue[900],
-                                            fontSize: 20),
-                                        softWrap: true,
-                                        // Enables wrapping of text
-                                      ),
-                                    )
-                                  ],
+                .map(
+                  (transaction) => Dismissible(
+                      key: Key(transaction['id']),
+                      direction: DismissDirection.endToStart, // Swipe to delete
+                      background: Container(
+                        color: Colors.red,
+                        alignment: Alignment.centerRight,
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        child: Icon(Icons.delete, color: Colors.white),
+                      ),
+                      confirmDismiss: (direction) async {
+                        return await showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text('Delete Budget'),
+                              content: Text(
+                                  'Are you sure you want to delete this Budget with All Items?'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.of(context)
+                                      .pop(false), // Cancel
+                                  child: Text('Cancel'),
                                 ),
-                                SizedBox(height: 15),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    Column(
-                                      children: [
-                                        Image.asset(
-                                          'assets/${transaction['imageUrl'].toString()}.png', // Your app logo here
-                                          width: 80,
+                                TextButton(
+                                  onPressed: () => Navigator.of(context)
+                                      .pop(true), // Confirm
+                                  child: Text('Delete',
+                                      style: TextStyle(color: Colors.red)),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      onDismissed: (direction) {
+                        _deleteBudget(transaction);
+                      },
+                      child: Container(
+                          child: InkWell(
+                        onTap: () {
+                          viewBudgetDetailsAdding(
+                              transaction["id"], transaction["title"]);
+                          // You can perform any action here when the card is tapped
+                        },
+                        child: Card(
+                          color: Colors.white,
+                          elevation: 5,
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.zero, // Removes rounded corners
+                          ),
+                          margin:
+                              EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+                          child: Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 10),
+                              child: Column(
+                                children: <Widget>[
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          transaction["title"].toString(),
+                                          style: TextStyle(
+                                              color: Colors.blue[900],
+                                              fontSize: 20),
+                                          softWrap: true,
+                                          // Enables wrapping of text
                                         ),
-                                      ],
-                                    ),
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.end,
-                                          children: [
-                                            Icon(
-                                              Icons.calendar_month_rounded,
-                                              color: Colors.green[900],
-                                            ),
-                                            Text(
-                                              ' ${transaction["startDate"].toString().substring(0, 10)}',
-                                              style: TextStyle(
-                                                  color: Colors.green[900],
-                                                  fontSize: 16),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(height: 25),
-                                        Row(
+                                      )
+                                    ],
+                                  ),
+                                  SizedBox(height: 15),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      Column(
+                                        children: [
+                                          Image.asset(
+                                            'assets/${transaction['imageUrl'].toString()}.png', // Your app logo here
+                                            width: 80,
+                                          ),
+                                        ],
+                                      ),
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: <Widget>[
+                                          Row(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.end,
                                             children: [
                                               Icon(
                                                 Icons.calendar_month_rounded,
-                                                color: Colors.orange[900],
+                                                color: Colors.green[900],
                                               ),
                                               Text(
-                                                ' ${transaction["enddate"].toString().substring(0, 10)}',
+                                                ' ${transaction["startDate"].toString().substring(0, 10)}',
                                                 style: TextStyle(
-                                                    color: Colors.orange[900],
+                                                    color: Colors.green[900],
                                                     fontSize: 16),
                                               ),
-                                            ])
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                Divider(
-                                  color: const Color.fromARGB(255, 151, 153,
-                                      155), // Color of the divider
-                                  height:
-                                      30, // Space above and below the divider
-                                  thickness: 1, // Thickness of the divider
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Column(
-                                      children: [
-                                        Text(
-                                          'Income',
-                                          style: TextStyle(
-                                              color: Colors.blue[450],
-                                              fontSize: 14),
-                                        ),
-                                        Text(
-                                          '${transaction["totaincome"] == null ? 0.00 : transaction["totaincome"]?.toStringAsFixed(2)}',
-                                          style: TextStyle(
-                                              color: Colors.blue[450],
-                                              fontSize: 14),
-                                        ),
-                                      ],
-                                    ),
-                                    Column(
-                                      children: [
-                                        Text(
-                                          'Expenses',
-                                          style: TextStyle(
-                                              color: Colors.red[900],
-                                              fontSize: 14),
-                                        ),
-                                        Text(
-                                          '${transaction["totalexpenses"] == null ? 0.00 : transaction["totalexpenses"].toStringAsFixed(2)}',
-                                          style: TextStyle(
-                                              color: Colors.red[900],
-                                              fontSize: 14),
-                                        ),
-                                      ],
-                                    ),
-                                    Column(
-                                      children: [
-                                        Text(
-                                          'Balance',
-                                          style: TextStyle(
-                                              color: Colors.green[900],
-                                              fontSize: 14),
-                                        ),
-                                        Text(
-                                          '${transaction.isEmpty ? 0.00 : ((transaction["totaincome"] ?? 0) - (transaction["totalexpenses"] ?? 0)).toStringAsFixed(2)}',
-                                          style: TextStyle(
-                                              color: Colors.green[900],
-                                              fontSize: 14),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            )),
-                      ),
-                    )))
+                                            ],
+                                          ),
+                                          SizedBox(height: 25),
+                                          Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.end,
+                                              children: [
+                                                Icon(
+                                                  Icons.calendar_month_rounded,
+                                                  color: Colors.orange[900],
+                                                ),
+                                                Text(
+                                                  ' ${transaction["enddate"].toString().substring(0, 10)}',
+                                                  style: TextStyle(
+                                                      color: Colors.orange[900],
+                                                      fontSize: 16),
+                                                ),
+                                              ])
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  Divider(
+                                    color: const Color.fromARGB(255, 151, 153,
+                                        155), // Color of the divider
+                                    height:
+                                        30, // Space above and below the divider
+                                    thickness: 1, // Thickness of the divider
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        children: [
+                                          Text(
+                                            'Income',
+                                            style: TextStyle(
+                                                color: Colors.blue[450],
+                                                fontSize: 14),
+                                          ),
+                                          Text(
+                                            '${transaction["totaincome"] == null ? 0.00 : transaction["totaincome"]?.toStringAsFixed(2)}',
+                                            style: TextStyle(
+                                                color: Colors.blue[450],
+                                                fontSize: 14),
+                                          ),
+                                        ],
+                                      ),
+                                      Column(
+                                        children: [
+                                          Text(
+                                            'Expenses',
+                                            style: TextStyle(
+                                                color: Colors.red[900],
+                                                fontSize: 14),
+                                          ),
+                                          Text(
+                                            '${transaction["totalexpenses"] == null ? 0.00 : transaction["totalexpenses"].toStringAsFixed(2)}',
+                                            style: TextStyle(
+                                                color: Colors.red[900],
+                                                fontSize: 14),
+                                          ),
+                                        ],
+                                      ),
+                                      Column(
+                                        children: [
+                                          Text(
+                                            'Balance',
+                                            style: TextStyle(
+                                                color: Colors.green[900],
+                                                fontSize: 14),
+                                          ),
+                                          Text(
+                                            '${transaction.isEmpty ? 0.00 : ((transaction["totaincome"] ?? 0) - (transaction["totalexpenses"] ?? 0)).toStringAsFixed(2)}',
+                                            style: TextStyle(
+                                                color: Colors.green[900],
+                                                fontSize: 14),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              )),
+                        ),
+                      ))),
+                )
                 .toList(),
           ],
         ),
@@ -241,6 +280,20 @@ class _BudgetScreenState extends State<BudgetScreen> with RouteAware {
         child: Icon(Icons.add),
       ),
     );
+  }
+
+  Future<void> _deleteBudget(Map transaction) async {
+    try {
+      final result = await _budgetService.delete(transaction['id']);
+      if (result > 0) {
+        _showSnackbar('Budget deleted successfully');
+        _loadBudgets(); // Reload the list after deletion
+      } else {
+        _showSnackbar('Failed to delete Budget');
+      }
+    } catch (e) {
+      _showSnackbar('Error deleting Budget: $e');
+    }
   }
 
   void viewBudgetDetailsAdding(String budgetId, String title) {

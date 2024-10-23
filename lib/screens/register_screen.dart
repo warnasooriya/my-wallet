@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:myfinanceapp/services/auth_service.dart';
 import 'package:myfinanceapp/utils/constants.dart';
@@ -30,14 +31,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
       body: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              primaryGradientColor,
-              secondaryGradientColor
-            ], // Gradient from dark gray to black
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
+          color: primaryColor,
         ),
         child: Center(
           child: SingleChildScrollView(
@@ -56,7 +50,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
-                            color: textColor)),
+                            color: primaryColor)),
                     SizedBox(height: 40),
                     TextField(
                       controller: _emailController,
@@ -85,12 +79,46 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       onPressed: () async {
                         final email = _emailController.text.trim();
                         final password = _passwordController.text.trim();
-                        final user =
-                            await _authService.register(email, password);
-                        if (user != null) {
-                          Navigator.pushNamed(context, '/login');
-                        } else {
-                          showError(context, 'Registration failed');
+
+                        try {
+                          // Attempt to register the user
+                          final user =
+                              await _authService.register(email, password);
+
+                          if (user != null) {
+                            // Registration was successful, navigate to login screen
+                            Navigator.pushNamed(context, '/home');
+                          } else {
+                            // In case no user object is returned
+                            showError(context,
+                                'Registration failed. Please try again.');
+                          }
+                        } on FirebaseAuthException catch (e) {
+                          // Handle different types of FirebaseAuth exceptions
+                          String errorMessage;
+
+                          switch (e.code) {
+                            case 'weak-password':
+                              errorMessage =
+                                  'The password provided is too weak.';
+                              break;
+                            case 'email-already-in-use':
+                              errorMessage =
+                                  'The account already exists for that email.';
+                              break;
+                            case 'invalid-email':
+                              errorMessage = 'The email address is not valid.';
+                              break;
+                            default:
+                              errorMessage =
+                                  'Registration failed. Please try again.';
+                          }
+
+                          showError(context, errorMessage);
+                        } catch (e) {
+                          // Handle any other errors (non-Firebase)
+                          showError(context,
+                              e.toString()); // Show the error message to the user
                         }
                       },
                       style: ElevatedButton.styleFrom(
@@ -116,7 +144,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         Navigator.pushNamed(context, '/login');
                       },
                       child: Text('Already have an account? Log In',
-                          style: TextStyle(color: textColor)),
+                          style: TextStyle(color: Colors.pinkAccent)),
                     ),
                   ],
                 ),

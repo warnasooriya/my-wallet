@@ -10,4 +10,8 @@ class BudgetService {
   Future<List<Map<String, dynamic>>> getByUserId(userId) async {
     return await _budgetDAO.getByUserId(userId);
   }
+
+  Future<int> delete(String id) async {
+    return _budgetDAO.delete(id);
+  }
 }

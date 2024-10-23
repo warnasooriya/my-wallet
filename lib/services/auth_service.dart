@@ -2,11 +2,12 @@ import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:myfinanceapp/services/data_sync_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
+  final DataSyncService _dataSyncService = DataSyncService();
   // Placeholder login method
   Future<User?> login(String email, String password) async {
     try {
@@ -18,7 +19,8 @@ class AuthService {
       prefs.setString('userImageUrl', credencials.user!.photoURL!);
       prefs.setString('userName', credencials.user!.displayName!);
       prefs.setString('userEmail', credencials.user!.email!);
-
+      String userId = credencials.user!.uid;
+      await _dataSyncService.firebaseDataDownloadToLocal(userId);
       return credencials.user;
     } catch (e) {
       print(e);
@@ -33,15 +35,15 @@ class AuthService {
       final credencials = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
 
+      print('credencials-new: $credencials');
       prefs.setString('userId', credencials.user!.uid);
-      prefs.setString('userImageUrl', credencials.user!.photoURL!);
-      prefs.setString('userName', credencials.user!.displayName!);
+      prefs.setString('userImageUrl', credencials.user!.photoURL ?? '');
+      prefs.setString('userName', credencials.user?.displayName ?? '');
       prefs.setString('userEmail', credencials.user!.email!);
 
       return credencials.user;
     } catch (e) {
-      print(e);
-      return null;
+      throw e;
     }
   }
 
@@ -62,6 +64,8 @@ class AuthService {
     prefs.setString('userImageUrl', userCredential.user!.photoURL!);
     prefs.setString('userName', userCredential.user!.displayName!);
     prefs.setString('userEmail', userCredential.user!.email!);
+    String userId = userCredential.user!.uid;
+    await _dataSyncService.firebaseDataDownloadToLocal(userId);
 
     if (userCredential.user != null) {
       return true;

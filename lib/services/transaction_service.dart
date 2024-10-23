@@ -21,4 +21,8 @@ class TransactionService {
   Future<DashbardResponseDto> getDataForDashbord(String userId) {
     return _transactionDAO.getDataForDashbord(userId);
   }
+
+  Future<int> delete(String id, String userId) async {
+    return _transactionDAO.delete(id, userId);
+  }
 }

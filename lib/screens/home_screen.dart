@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:math';
 import 'dart:ui';
 
@@ -110,12 +109,12 @@ class _HomePageState extends State<HomePage> with RouteAware {
 
   Widget _buildChartCard(Widget chart, String title) {
     return Card(
-        elevation: 4,
+        // elevation: 8,
         margin: const EdgeInsets.all(8),
         child: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [primaryColor, const Color.fromARGB(213, 151, 227, 241)],
+              colors: [primaryColor, const Color.fromARGB(212, 255, 255, 255)],
               stops: [0, 1],
               begin: AlignmentDirectional(0.94, -1),
               end: AlignmentDirectional(-0.94, 1),
@@ -133,7 +132,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
                   style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white),
+                      color: const Color.fromARGB(255, 0, 0, 0)),
                 ),
               ),
               // SizedBox(height: 10),
@@ -153,7 +152,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
     var isDarkMode = themeData.brightness == Brightness.dark;
     return Scaffold(
       appBar: AppBar(
-        title: Text('My Finance'),
+        title: Text('My Wallet'),
         backgroundColor: primaryColor,
         foregroundColor: headerTextColor,
       ),
@@ -268,7 +267,7 @@ class _HomePageState extends State<HomePage> with RouteAware {
               ListTile(
                 title: Text(label,
                     style:
-                        TextStyle(fontStyle: FontStyle.italic, fontSize: 18)),
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
                 subtitle: Text(
                   value.toStringAsFixed(2),
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
